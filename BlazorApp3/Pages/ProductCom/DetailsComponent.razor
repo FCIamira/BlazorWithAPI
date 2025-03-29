@@ -1,0 +1,49 @@
+﻿@page "/prod/Details/{id:int}"
+
+<h3>AllProductComponent</h3>
+<PageTitle>AllProduct</PageTitle>
+<h1>@id</h1>
+@if (productobj != null )
+{
+   
+        <div class="container p-3">
+            <div class=" border border-2 p-4 w-100  rounded-2 row">
+               
+                <div class="col-12 col-md-8 p-3">
+                <h1><strong>Name:</strong> @productobj.Name</h1>
+                <p><strong>Price:</strong> @productobj.Price</p>
+
+                <a href="/prod" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    
+}
+else
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        Product not found.
+    </div>
+}
+@code {
+    [Parameter]
+    public int id { get; set; }
+    [Inject]
+    public IService<Product> product { get; set; }
+ 
+    // public IService<Category> categoryService { get; set; }
+
+
+    // public Category category { get; set; }
+    public Product productobj { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine($"Received ID: {id}"); 
+
+        productobj = await product.GetById(id);
+       
+        //category = await categoryService.GetById(productobj.CategoryId);
+    }
+
+
+}

@@ -1,0 +1,45 @@
+﻿@page "/category/Details/{id:int}"
+
+<h3>AllProductComponent</h3>
+<PageTitle>AllProduct</PageTitle>
+<h1>@id</h1>
+@if ( category !=null)
+{
+   
+        <div class="container p-3">
+            <div class=" border border-2 p-4 w-100  rounded-2 row">
+              
+                <div class="col-12 col-md-8 p-3">
+                <h1><strong>Name:</strong> @category.Name</h1>
+                <p><strong>Price:</strong> @category.description</p>
+                
+
+                <a href="/prod" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    
+}
+else
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        Product not found.
+    </div>
+}
+@code {
+    [Parameter]
+    public int id { get; set; }
+
+    [Inject]
+    public IService<Category> categoryService { get; set; }
+
+
+    
+    public Category category { get; set; }
+    protected override async void OnInitialized()
+    {
+       
+        category = await categoryService.GetById(id);
+        base.OnInitialized();
+    }
+}

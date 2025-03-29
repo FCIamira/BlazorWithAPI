@@ -1,0 +1,90 @@
+﻿@page "/prod/Edit/{id:int}"
+<h3>EditproductComponent</h3>
+@if (productobj != null)
+{
+     <EditForm Model="productobj" OnValidSubmit="Save">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        <ValidationSummary></ValidationSummary>
+    
+    <div class="form-group">
+        <label for="name">Name</label>
+        <InputText id="name" class="form-control" @bind-Value="@productobj.Name" />
+        <ValidationMessage For="()=>productobj.Name"></ValidationMessage>
+     </div>
+    <div class="form-group">
+        <label for="price">Price</label>
+        <InputNumber id="price" class="form-control" @bind-Value="@productobj.Price" />
+        <ValidationMessage For="()=>productobj.Price"></ValidationMessage>
+            
+    </div>
+        
+    <div class="form-group">
+        <label for="price">Price</label>
+        <InputText id="quantity" class="form-control" @bind-Value="@productobj.Description" />
+        <ValidationMessage For="()=>productobj.Description"></ValidationMessage>
+
+     </div> 
+
+        <div class="form-group">
+            <label for="categoryid">category</label>
+            <InputSelect id="categoryid" class="form-control" @bind-Value="@productobj.CategoryId">
+
+                <option value="">-- select category --</option>
+                @foreach (var category in categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </InputSelect>
+            <ValidationMessage For="()=>productobj.CategoryId"></ValidationMessage>
+        </div>
+        <button type="submit" class="btn btn-primary">submit</button>
+        <div>
+            @productobj.ToString();
+        </div> 
+
+    </EditForm> 
+}
+else
+{
+    <div class="alert alert-danger mt-3" role="alert">
+        Product not found.
+    </div>
+} 
+
+@code {
+    // try{
+    [Parameter]
+    public int id { get; set; }
+    [Inject]
+    public IService<Product> productservice { get; set; }
+    [Inject]
+    public IService<Category> categoryService { get; set; }
+    public Product productobj { get; set; }
+    public List<Category> categories { get; set; }
+    [Inject]
+    public NavigationManager NavMessage { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        productobj = await productservice.GetById(id);
+        if (productobj == null)
+        {
+            Console.WriteLine($"Product with ID {id} not found.");
+        }
+        categories = await categoryService.GetAll();
+        if (categories == null)
+        {
+            Console.WriteLine($"categories with ID {id} not found.");
+        }
+    }
+    public async void Save() 
+    {
+        //productobj.Id = id;
+        await productservice.Update(id, productobj);
+        Console.WriteLine($"Product {productobj.Name} updated successfully.");
+        NavMessage.NavigateTo("/prod");
+
+    }
+   
+}
+ 

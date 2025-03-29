@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Test</title>
+</head>
+<body>
+    <input id="ProductID" placeholder="enter your data" />
+    <div id="div" style="border:10px solid red;font-size:40px"></div>
+    <input type="button" onclick="GetDepartment()" value="submit" />
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js"></script>-->
+
+<script>
+    function GetDepartment() {
+        var ProductID = $("#ProductID").val();
+        $.ajax({
+            url: "api/Product/" + ProductID,
+            type: "Get",
+            data: {},
+            success: function (result) {
+                console.log(result);
+                $("#div").html("item name" + result.name + " price is : " + result.price);
+            }
+           
+        });
+    }
+</script>
+
+
+</html>

@@ -1,0 +1,56 @@
+﻿@page "/prod"
+
+<h3>AllProductComponent</h3>
+<PageTitle>AllProduct</PageTitle>
+
+ @if(productobj !=null)
+{
+    <h2 >
+        <a href="/prod/Add"> add new product</a>
+        </h2>
+    <table class="table table-bordered table-hover">
+        <thead>
+        <th>name</th>
+        <th>price</th>
+        <th>Details</th>
+        <th>Edit</th>
+         <th>Delete</th>
+        </thead>
+     <tbody>
+    @foreach(var products in productobj ){
+       <tr> 
+            <td class="align-middle">@products.Name</td>
+            <td class="align-middle">@products.Price</td>
+            <td> <a class="btn btn-primary btn-sm" href="/prod/Details/@products.Id">Details</a></td>
+            <td> <a class="btn btn-primary btn-sm" href="/prod/Edit/@products.Id">Edit</a> </td>
+            <td> <a class="btn btn-primary btn-sm" href="/prod/Delete/@products.Id">Delete</a> </td>
+   
+        </tr>
+    }
+        </tbody>
+    </table>
+}
+else
+{
+     <div class="alert alert-danger mt-3" role="alert">
+        Product not found.
+    </div>
+} 
+@code {
+
+    public int id { get; set; }
+    [Inject]
+    public IService<Product> product { get; set; }
+
+    
+    public List<Product> productobj { get; set; }
+   
+
+    protected override async Task OnInitializedAsync()
+    {
+        productobj = await product.GetAll();
+    }
+
+   
+
+}
